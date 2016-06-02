@@ -1,16 +1,17 @@
-require_relative 'station'
+require_relative 'journey'
 
 
 class Oystercard
 
 	BALANCE_LIMIT = 90
 	MIN_LIMIT = 1
-	FARE = 1
 
 
-	attr_reader :balance, :in_journey, :entry_station, :journeys
 
-	def initialize
+	attr_reader :balance, :in_journey, :entry_station
+
+	def initialize(journey = Journey.new)
+		@journey = journey
 		@balance = 0
 		@in_journey = false
 		@entry_station = nil
@@ -19,6 +20,7 @@ class Oystercard
 	end
 
 	def in_journey?
+
 		@entry_station
 	end
 
@@ -30,20 +32,23 @@ class Oystercard
 
 	def touch_in(station)
 		fail "Can't touch in your balance is below £#{Oystercard::MIN_LIMIT}" if @balance < MIN_LIMIT
+		@journey.start(station)
 		@in_journey = true
 		@entry_station = station
-		self
+				# self
 	end
 
 	def touch_out(station)
-		@in_journey = false
-		@journeys << {:entry => @entry_station, :exit => station}
 
+		@journey.finish(station)
+		@in_journey = false
+		# @journeys << {:exit => station}
+		fare = @journey.fare(@entry_station,station)
 		# saves the journey and then sets entry station to nil
 		# @entry_station = nil
 		# @exit_station = nil
-		deduct(FARE)
-		self
+		deduct(fare)
+		# self
 	end
 
 	private
