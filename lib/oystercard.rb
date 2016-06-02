@@ -8,13 +8,14 @@ class Oystercard
 	FARE = 1
 
 
-	attr_reader :balance, :in_journey, :entry_station, :exit_station
+	attr_reader :balance, :in_journey, :entry_station, :journeys
 
 	def initialize
 		@balance = 0
 		@in_journey = false
 		@entry_station = nil
 		@exit_station = nil
+		@journeys = []
 	end
 
 	def in_journey?
@@ -36,9 +37,10 @@ class Oystercard
 
 	def touch_out(station)
 		@in_journey = false
-		@exit_station = station
+		@journeys << {:entry => @entry_station, :exit => station}
+
 		# saves the journey and then sets entry station to nil
-		@entry_station = nil
+		# @entry_station = nil
 		# @exit_station = nil
 		deduct(FARE)
 		self
