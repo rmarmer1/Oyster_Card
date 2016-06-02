@@ -36,14 +36,14 @@ class Oystercard
 		@in_journey = true
 		@entry_station = station
 				# self
-	end
+			end
 
-	def touch_out(station)
+			def touch_out(station)
 
-		@journey.finish(station)
-		@in_journey = false
+				@journey.finish(station)
+				@in_journey = false
 		# @journeys << {:exit => station}
-		fare = @journey.fare(@entry_station,station)
+		fare = @journey.fare #(@entry_station,station)
 		# saves the journey and then sets entry station to nil
 		# @entry_station = nil
 		# @exit_station = nil

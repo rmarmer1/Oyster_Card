@@ -1,6 +1,7 @@
 #should be responsible for starting a journey, finishing a journey, calculating the fare of a journey, and returning whether or not the journey is complete.
 class Journey
   FARE = 1
+  PENALTY = 6
 
   attr_reader :journey_log
 
@@ -17,11 +18,15 @@ class Journey
     @journey_log << {:exit_station => station}
   end
 
-  def fare (entry_station,exit_station)
-    FARE
+  def fare #(entry_station,exit_station)
+
+    complete? ? PENALTY : FARE 
+
   end
 
-  def complete
+  def complete?
+    @complete = false if @journey_log[-1].keys == journey_log[-2].keys 
+
   end
 
 end

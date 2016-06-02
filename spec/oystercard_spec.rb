@@ -1,9 +1,10 @@
 require 'oystercard'
+require 'journey'
 
 describe Oystercard do
 	let ( :station ) { double(name: 'name', zone: 1) }
 
-	  describe '#balance' do
+	describe '#balance' do
 
 		it { is_expected.to respond_to(:balance) }
 
@@ -11,32 +12,32 @@ describe Oystercard do
 			expect(subject.balance).to eq 0
 		end
 
-	  end
+	end
 
-		describe "#top_up" do
+	describe "#top_up" do
 
-			it { is_expected.to respond_to(:top_up).with(1).argument }
+		it { is_expected.to respond_to(:top_up).with(1).argument }
 
-			it "should increase the balance" do
-				expect{subject.top_up(5)}.to change{subject.balance}.by 5
-			end
-
-			it "raises an error if top_up amount would push balance over #{Oystercard::BALANCE_LIMIT}" do
-				expect { subject.top_up(91) }.to raise_error "Can't add to your balance; would breach the £#{Oystercard::BALANCE_LIMIT} limit"
-			end
+		it "should increase the balance" do
+			expect{subject.top_up(5)}.to change{subject.balance}.by 5
 		end
 
-		describe '#touch_in(station)' do
+		it "raises an error if top_up amount would push balance over #{Oystercard::BALANCE_LIMIT}" do
+			expect { subject.top_up(91) }.to raise_error "Can't add to your balance; would breach the £#{Oystercard::BALANCE_LIMIT} limit"
+		end
+	end
+
+	describe '#touch_in(station)' do
 		# 	it "should indicate that user has touched in and begins journey" do
 		# 		subject.top_up(5)
 		# 		subject.touch_in(station)
 		# 		expect(subject).to be_in_journey
 		# 	end
 
-			it "raises an error if card balance is less than  £#{Oystercard::MIN_LIMIT}" do
-				expect {subject.touch_in(station)}.to raise_error "Can't touch in your balance is below £#{Oystercard::MIN_LIMIT}"
-			end
+		it "raises an error if card balance is less than  £#{Oystercard::MIN_LIMIT}" do
+			expect {subject.touch_in(station)}.to raise_error "Can't touch in your balance is below £#{Oystercard::MIN_LIMIT}"
 		end
+	end
 
 		# 	it 'stores the name of a journey\'s entry station' do
 		# 		subject.top_up(5)
@@ -53,11 +54,12 @@ describe Oystercard do
 			# 	expect(subject).not_to be_in_journey
 			# end
 
-			it "reduces the card balance by the journey fare #{Journey::FARE}" do
+			it "reduces the card balance by the journey fare 1 or 6" do
 				subject.top_up(5)
 				subject.touch_in(station)
 				subject.touch_out(station)
-				expect{subject.touch_out(station)}.to change{subject.balance}.by "-#{Journey::FARE}".to_i
+
+				expect{subject.touch_out(station)}.to change{subject.balance}.by -1
 			end
 
 			# it 'sets the entry_station to nil on touch_out' do
@@ -97,4 +99,4 @@ describe Oystercard do
 		# 	it 'allows a card to "know" & store entry_station
 		# end
 
-end
+	end

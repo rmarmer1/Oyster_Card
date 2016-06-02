@@ -1,8 +1,8 @@
 #should be responsible for starting a journey, finishing a journey, calculating the fare of a journey, and returning whether or not the journey is complete.
 require 'journey'
 describe Journey do
-subject(:journey){described_class.new}
-let ( :station ) { double(name: 'name', zone: 1) }
+  subject(:journey){described_class.new}
+  let ( :station ) { double(name: 'name', zone: 1) }
 
   describe '#start' do
 
@@ -28,16 +28,18 @@ let ( :station ) { double(name: 'name', zone: 1) }
   end
 
   describe '#fare' do
-    it {should respond_to(:fare).with(2).argument}
-    # it 'calculates the fare' do
-    #   expect
-    # end
+    #it {should respond_to(:fare).with(2).argument}
+    it 'calculates the fare' do
+      expect(:fare).not_to eq 1
+    end
   end
 
-  describe '#complete' do
-    it {should respond_to(:complete)}
+  describe '#complete??' do
+    it {should respond_to(:complete?)}
 
-    it 'should recognise an incomplete journey' do
+    it 'should recognise an complete? journey' do
+      journey.journey_log <<  {:entry => :name} << {:entry => :name}
+      expect(journey.journey_log[-1].keys == journey.journey_log[-2].keys ).to eq true
 
     end
   end
