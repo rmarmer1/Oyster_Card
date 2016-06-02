@@ -1,13 +1,13 @@
 require 'oystercard'
 
 describe Oystercard do
-	let ( :station ) { double(:station) }
-	  describe '#balance' do
+	let ( :station ) { double(name: 'name', zone: 1) }
+	describe '#balance' do
 
-		  it { is_expected.to respond_to(:balance) }
+		it { is_expected.to respond_to(:balance) }
 
-		  it 'has an initial balance of 0' do
-			  expect(subject.balance).to eq 0
+		it 'has an initial balance of 0' do
+			expect(subject.balance).to eq 0
 		end
 
 		describe "#top_up" do
